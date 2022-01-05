@@ -1,0 +1,41 @@
+unit uBombaControle;
+
+interface
+
+uses
+  uBombaModel, uDMBomba;
+
+type
+  TBombaControle = class
+  public
+    procedure LoadRegistro(obomba: TBomba; ID: integer);
+    function Insert(oBomba: TBomba; var Erro:String): Boolean;
+    function Edit(oBomba: TBomba; var Erro:String): Boolean;
+    function Delete(ID: integer; var Erro:String): Boolean;
+  end;
+
+implementation
+
+{ TBombaControle }
+
+function TBombaControle.Delete(ID: integer; var Erro: String): Boolean;
+begin
+  Result  := uDMBomba.DMBomba.Delete(ID,Erro);
+end;
+
+function TBombaControle.Edit(oBomba: TBomba; var Erro: String): Boolean;
+begin
+  Result  := uDMBomba.DMBomba.Edit(oBomba,Erro);
+end;
+
+function TBombaControle.Insert(oBomba: TBomba; var Erro: String): Boolean;
+begin
+  Result  := uDMBomba.DMBomba.Insert(oBomba,Erro);
+end;
+
+procedure TBombaControle.LoadRegistro(obomba: TBomba; ID: integer);
+begin
+  uDMBomba.DMBomba.LoadCad(ID);
+end;
+
+end.

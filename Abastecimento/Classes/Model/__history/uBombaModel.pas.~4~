@@ -1,0 +1,22 @@
+unit uBombaModel;
+
+interface
+
+type
+  TBomba = class
+  private
+    FID: Integer;
+    FSTATUS: Integer;
+    FID_TANQUE: Integer;
+    FNOME: String;
+  public
+    property  ID:         Integer   read FID        write FID;
+    property  NOME:       String    read FNOME      write FNOME;
+    property  ID_TANQUE:  Integer   read FID_TANQUE write FID_TANQUE;
+    property  STATUS:     Integer   read FSTATUS    write FSTATUS;
+  end;
+
+
+implementation
+
+end.

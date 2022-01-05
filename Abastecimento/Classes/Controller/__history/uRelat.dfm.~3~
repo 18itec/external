@@ -1,0 +1,13 @@
+object DMRelat: TDMRelat
+  OldCreateOrder = False
+  Height = 78
+  Width = 79
+  object QrRelat: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'select id, nome'
+      'from tanques where status = 1')
+    Left = 24
+    Top = 14
+  end
+end

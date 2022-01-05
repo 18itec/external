@@ -1,0 +1,223 @@
+unit uDMBomba;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, uBombaModel;
+
+type
+  TDMBomba = class(TDataModule)
+    QrSearch: TFDQuery;
+    QrInsert: TFDQuery;
+    QrDelete: TFDQuery;
+    QrEdit: TFDQuery;
+    QrFK: TFDQuery;
+  private
+    FListaFK : TList;
+  public
+    function GetMaxID : Integer;
+    procedure LoadCad(oBomba: TBomba; NOME: String);
+    procedure LoadCadID(oBomba: TBomba; ID: Integer);
+    function Insert(obomba: TBomba; out Erro: String):Boolean;
+    function Edit(obomba: TBomba; out Erro: String):Boolean;
+    function Delete(ID: Integer; out Erro: String):Boolean;
+    procedure Loadall;
+    procedure GetList(oBomba: TBomba);
+    procedure GetFk;
+  end;
+
+var
+  DMBomba: TDMBomba;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+uses uConexao;
+
+{$R *.dfm}
+
+{ TDataModule }
+
+function TDMBomba.Delete(ID: Integer; out Erro: String): Boolean;
+begin
+  with QrDelete do
+    begin
+     Params[0].AsInteger  := ID;
+
+       try
+         ExecSQL;
+         Result := True;
+       except
+        on E: Exception do
+          begin
+            Erro  := 'Erro ao excluir a bomba' + sLineBreak + E.Message;
+            Result := False;
+          end;
+       end;
+    end;
+end;
+
+function TDMBomba.Edit(obomba: TBomba; out Erro: String): Boolean;
+begin
+  with QrEdit, obomba do
+    begin
+     Params[0].AsString   := NOME;
+     Params[1].AsInteger  := ID_TANQUE;
+     Params[2].AsInteger  := STATUS;
+     Params[3].AsInteger  := ID;
+
+       try
+         ExecSQL;
+         Result := True;
+       except
+        on E: Exception do
+          begin
+            Erro  := 'Erro ao alterar a bomba' + sLineBreak + E.Message;
+            Result := False;
+          end;
+       end;
+    end;
+end;
+
+procedure TDMBomba.GetFk;
+begin
+  QrFK.Open;
+end;
+
+procedure TDMBomba.GetList(oBomba: TBomba);
+begin
+  QrFK.Open;
+
+  if not (QrFK.IsEmpty) then
+    begin
+      if not(Assigned(FListaFK)) then
+        FListaFK := TList.Create;
+
+      with QrFK, obomba do
+        begin
+          Open;
+          Params[0].AsString   := NOME;
+          Params[1].AsInteger  := ID_TANQUE;
+          Params[2].AsInteger  := STATUS;
+          Params[3].AsInteger  := ID;
+          FListaFK.Add(oBomba);
+        end;
+    end;
+
+end;
+
+function TDMBomba.GetMaxID: Integer;
+var
+  QueryMax : TFDQuery;
+begin
+  QueryMax := TFDQuery.Create(nil);
+
+  try
+    with QueryMax do
+      begin
+        Connection := Controle.FConexao;
+        SQL.Text := 'select coalesce(max(id),0) + 1 as idmax from bombas';
+        Open;
+      end;
+    Result := QueryMax.FieldByName('idmax').AsInteger;
+  finally
+    FreeAndNil(QueryMax);
+  end;
+
+end;
+
+function TDMBomba.Insert(obomba: TBomba; out Erro: String): Boolean;
+begin
+  with QrInsert, obomba do
+    begin
+     Params[0].AsInteger  := GetMaxID;
+     Params[1].AsString   := NOME;
+     Params[2].AsInteger  := ID_TANQUE;
+     Params[3].AsInteger  := STATUS;
+
+       try
+         ExecSQL;
+         Result := True;
+       except
+        on E: Exception do
+          begin
+            Erro  := 'Erro ao cadastrar a bomba' + sLineBreak + E.Message;
+            Result := False;
+          end;
+       end;
+    end;
+end;
+
+procedure TDMBomba.Loadall;
+begin
+  QrSearch.Open;
+end;
+
+procedure TDMBomba.LoadCad(oBomba: TBomba; NOME: String);
+var
+  QueryLoad : TFDQuery;
+begin
+  QueryLoad := TFDQuery.Create(nil);
+
+  try
+    with QueryLoad do
+      begin
+        Connection := Controle.FConexao;
+        SQL.Text := 'select * from bombas where NOME LIKE %'+ NOME +'%';
+        Open;
+      end;
+
+    if not(QueryLoad.IsEmpty) then
+      begin
+        with oBomba do
+          begin
+            ID          :=  QueryLoad.FieldByName('ID').AsInteger;
+            ID_TANQUE   :=  QueryLoad.FieldByName('ID_TANQUE').AsInteger;
+            NOME        :=  QueryLoad.FieldByName('NOME').AsString;
+            STATUS      :=  QueryLoad.FieldByName('STATUS').AsInteger;
+          end;
+      end;
+
+  finally
+    FreeAndNil(QueryLoad);
+  end;
+
+end;
+
+procedure TDMBomba.LoadCadID(oBomba: TBomba; ID: Integer);
+var
+  QueryLoad : TFDQuery;
+begin
+  QueryLoad := TFDQuery.Create(nil);
+
+  try
+    with QueryLoad do
+      begin
+        Connection := Controle.FConexao;
+        SQL.Text := 'select * from bombas where ID ='+ IntToStr(ID);
+        Open;
+      end;
+
+    if not(QueryLoad.IsEmpty) then
+      begin
+        with oBomba do
+          begin
+            ID          :=  QueryLoad.FieldByName('ID').AsInteger;
+            ID_TANQUE   :=  QueryLoad.FieldByName('ID_TANQUE').AsInteger;
+            NOME        :=  QueryLoad.FieldByName('NOME').AsString;
+            STATUS      :=  QueryLoad.FieldByName('STATUS').AsInteger;
+          end;
+      end;
+
+  finally
+    FreeAndNil(QueryLoad);
+  end;
+
+end;
+
+end.
+

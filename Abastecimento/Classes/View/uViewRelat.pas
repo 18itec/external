@@ -1,0 +1,332 @@
+unit uViewRelat;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.StdCtrls, Vcl.ComCtrls,
+  RLReport, RLFilters, RLPDFFilter, RLParser, Data.DB, uRelat,
+  Vcl.Mask, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids, uConexao, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TfRelat = class(TForm)
+    GroupBox1: TGroupBox;
+    ChkPer: TCheckBox;
+    ChkBombas: TCheckBox;
+    ChkTanque: TCheckBox;
+    Chktodos: TCheckBox;
+    DTIni: TDateTimePicker;
+    DTFim: TDateTimePicker;
+    Label2: TLabel;
+    CBBombas: TComboBox;
+    CBTanques: TComboBox;
+    Relat: TRLReport;
+    RLBand2: TRLBand;
+    RLTELEFONE_COMP: TRLLabel;
+    RLSystemInfo5: TRLSystemInfo;
+    dsRelat: TDataSource;
+    RLBand1: TRLBand;
+    RLLabel1: TRLLabel;
+    RLLabel2: TRLLabel;
+    RLLabel3: TRLLabel;
+    RLLabel4: TRLLabel;
+    RLLabel5: TRLLabel;
+    RLBand3: TRLBand;
+    RLDBText1: TRLDBText;
+    RLDBText2: TRLDBText;
+    RLDBText3: TRLDBText;
+    RLDBText4: TRLDBText;
+    RLBand4: TRLBand;
+    RLLabel7: TRLLabel;
+    RLDBText5: TRLDBText;
+    PDF: TRLPDFFilter;
+    EXP: TRLExpressionParser;
+    QrRelat: TFDQuery;
+    BtnGera: TSpeedButton;
+    RLLabel6: TRLLabel;
+    RLDBText7: TRLDBText;
+    RLLabel9: TRLLabel;
+    RLDBText8: TRLDBText;
+    RLDBResult1: TRLDBResult;
+    procedure BtnGeraClick(Sender: TObject);
+    procedure GetBombas;
+    procedure GetTanques;
+    procedure FormShow(Sender: TObject);
+    procedure Finali;
+    procedure ChktodosClick(Sender: TObject);
+    procedure ChkTanqueClick(Sender: TObject);
+    procedure ChkBombasClick(Sender: TObject);
+    procedure ChkPerClick(Sender: TObject);
+    procedure LoadRelat(ID_BOMBA,ID_TANQUE,DT_INI,DT_FIM : String; periodo,bomba,tanque: Boolean);
+    procedure CBBombasCloseUp(Sender: TObject);
+    procedure CBTanquesCloseUp(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fRelat: TfRelat;
+  ID_BOMBA, ID_TANQUE : String;
+  VLRTOTGER:Double;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfRelat.CBBombasCloseUp(Sender: TObject);
+begin
+  if CBBombas.ItemIndex > -1 then
+    begin
+      ID_BOMBA := IntToStr(Integer(CBBombas.Items.Objects[CBBombas.ItemIndex]));
+    end;
+
+end;
+
+procedure TfRelat.CBTanquesCloseUp(Sender: TObject);
+begin
+  if CBTanques.ItemIndex > -1 then
+    begin
+      ID_TANQUE := IntToStr(Integer(CBTanques.Items.Objects[CBTanques.ItemIndex]));
+    end;
+end;
+
+procedure TfRelat.ChkBombasClick(Sender: TObject);
+begin
+  if ChkBombas.Checked then
+    begin
+       Chktodos.Checked   :=false;
+       CBBombas.Enabled   :=true;
+    end
+  else
+    begin
+      CBBombas.Enabled    :=false;
+      CBBombas.ItemIndex  :=-1;
+    end;
+end;
+
+procedure TfRelat.ChkPerClick(Sender: TObject);
+begin
+  if ChkPer.Checked then
+    begin
+       Chktodos.Checked   :=false;
+       DTIni.Enabled      :=true;
+       DTFim.Enabled      :=true;
+    end
+  else
+    begin
+      DTIni.Enabled      :=false;
+      DTFim.Enabled      :=false;
+      DTIni.Date         :=Date;
+      DTFim.Date         :=Date;
+    end;
+end;
+
+procedure TfRelat.ChkTanqueClick(Sender: TObject);
+begin
+  if ChkTanque.Checked then
+    begin
+       Chktodos.Checked   := false;
+       CBTanques.Enabled  :=true;
+    end
+  else
+    begin
+      CBTanques.Enabled   :=false;
+      CBTanques.ItemIndex :=-1;
+    end;
+end;
+
+procedure TfRelat.ChktodosClick(Sender: TObject);
+begin
+  if Chktodos.Checked then
+    begin
+      ChkPer.Checked      := false;
+      ChkBombas.Checked   := false;
+      ChkTanque.Checked   := false;
+      CBBombas.Enabled    :=false;
+      CBTanques.Enabled   :=false;
+      DTIni.Enabled       :=false;
+      DTFim.Enabled       :=false;
+      CBBombas.ItemIndex  :=-1;
+      CBTanques.ItemIndex :=-1;
+      DTIni.Date          :=Date;
+      DTFim.Date          :=Date;
+    end;
+end;
+
+procedure TfRelat.Finali;
+begin
+  GetBombas;
+  GetTanques;
+  DTIni.Date          := Date;
+  DTFim.Date          := Date;
+  ChkPer.Checked      :=false;
+  ChkBombas.Checked   :=false;
+  ChkTanque.Checked   :=false;
+  Chktodos.Checked    :=true;
+  DTIni.Enabled       :=false;
+  DTFim.Enabled       :=false;
+  CBBombas.Enabled    :=false;
+  CBTanques.Enabled   :=false;
+  CBBombas.ItemIndex  := -1;
+  CBTanques.ItemIndex := -1;
+end;
+
+procedure TfRelat.FormShow(Sender: TObject);
+begin
+  Finali;
+end;
+
+procedure TfRelat.GetBombas;
+var
+  DM : TDMRelat;
+begin
+  DM  := TDMRelat.Create(self);
+  DM.GetFkBombas;
+  DM.QrFKBombas.First;
+  CBBombas.Items.Clear;
+  CBBombas.Clear;
+ while not (DM.QrFKBombas.Eof) do
+  begin
+    CBBombas.Items.AddObject( DM.QrFKBombas.FieldByName( 'NOME' ).AsString, TObject(DM.QrFKBombas.FieldByName( 'ID' ).AsInteger ) );
+    DM.QrFKBombas.Next;
+  end;
+end;
+
+procedure TfRelat.GetTanques;
+var
+  DM : TDMRelat;
+begin
+  DM  := TDMRelat.Create(self);
+  DM.GetFkTanque;
+  DM.QrFKTanque.First;
+  CBTanques.Items.Clear;
+  CBTanques.Clear;
+ while not (DM.QrFKTanque.Eof) do
+  begin
+    CBTanques.Items.AddObject( DM.QrFKTanque.FieldByName( 'NOME' ).AsString, TObject(DM.QrFKTanque.FieldByName( 'ID' ).AsInteger ) );
+    DM.QrFKTanque.Next;
+  end;
+
+end;
+
+procedure TfRelat.LoadRelat(ID_BOMBA, ID_TANQUE, DT_INI, DT_FIM: String;
+  periodo, bomba, tanque: Boolean);
+begin
+  with QrRelat do
+    begin
+       try
+          Close;
+          SQL.Clear;
+          SQL.Add('select ');
+          SQL.Add(' ab.* ');
+          SQL.Add(' ,bb.nome as bomba ');
+          SQL.Add(' ,tq.nome as tanque ');
+          SQL.Add(' ,bb.vlr_lts ');
+          SQL.Add(' ,(bb.vlr_lts * ab.qtd_litros) as totb ');
+          SQL.Add(' ,ab.data as dtabs ');
+         // SQL.Add(' ,extract(day from ab.data) || ''/''  || extract(month from ab.data) || ''/'' || extract(year from ab.data) as dataajustada ');
+          SQL.Add(' from abastecimentos ab ');
+          SQL.Add(' join bombas bb on (bb.id = ab.id_bomba) ');
+          SQL.Add(' join tanques tq on (tq.id = bb.id_tanque) ');
+          SQL.Add('where ');
+          SQL.Add(' (bb.nome <>  '''')');
+
+          //periodo
+          if periodo then
+            begin
+              SQL.Add(' and ( ab.data Between :pdtini And :pdtfin ) ');
+              ParamByName('pdtini').AsString := DT_INI;
+              ParamByName('pdtfin').AsString := DT_FIM;
+            end;
+
+          //Bomba
+          if bomba then
+            begin
+              SQL.Add(' and (bb.id =:pbomba) ');
+              ParamByName('pbomba').AsString := ID_BOMBA;
+            end;
+
+          //Tanque
+          if tanque then
+            begin
+              SQL.Add(' and (tq.id =:pTanque)');
+              ParamByName('pTanque').AsString := ID_TANQUE;
+            end;
+
+          Open;
+       except
+        on E: Exception do
+          begin
+            raise Exception.Create('Erro ao executar o processo');
+          end;
+       end;
+    end;
+end;
+
+procedure TfRelat.BtnGeraClick(Sender: TObject);
+var
+  DM : TDMRelat;
+  ID_BOMBAx, ID_TANQUEx, DT_INIx, DT_FIMx: String;
+  periodo, bomba, tanque: Boolean;
+begin
+  VLRTOTGER:=0;
+
+  DM  := TDMRelat.Create(self);
+
+  if ChkPer.Checked then
+    begin
+      DT_INIx := FormatDateTime('MM.DD.YYYY', DTIni.Date);
+      DT_FIMx := FormatDateTime('MM.DD.YYYY', DTFim.Date);
+      periodo :=true;
+    end
+  else
+    begin
+      DT_INIx := '';
+      DT_FIMx := '';
+      periodo :=false;
+    end;
+
+  if ChkBombas.Checked then
+    begin
+      ID_BOMBAx := ID_BOMBA;
+      bomba     :=true;
+    end
+  else
+    begin
+      ID_BOMBAx := '';
+      bomba     :=false;
+    end;
+
+  if ChkTanque.Checked then
+    begin
+      ID_TANQUEx  := ID_TANQUE;
+      tanque      :=true;
+    end
+  else
+    begin
+      ID_TANQUEx  := '';
+      tanque      :=false;
+    end;
+
+  if Chktodos.Checked then
+    begin
+      DT_INIx     := '';
+      DT_FIMx     := '';
+      periodo     :=false;
+      ID_BOMBAx   := '';
+      bomba       :=false;
+      ID_TANQUEx  := '';
+      tanque      :=false;
+    end;
+
+  LoadRelat(ID_BOMBAx,ID_TANQUEx,DT_INIx,DT_FIMx,periodo,bomba,tanque);
+  Relat.Prepare;
+  Relat.Preview;
+end;
+
+end.

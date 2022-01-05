@@ -1,0 +1,60 @@
+unit uTanqueControle;
+
+interface
+
+uses
+  System.SysUtils, uTanqueModel, uDMTanques;
+
+type
+  TBombaControle = class
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure LoadRegistro(otanque: TTanque; NOME: String);
+    procedure LoadRegistroID(otanque: TTanque; ID: Integer);
+    function Insert(otanque: TTanque; var Erro:String): Boolean;
+    function Edit(otanque: TTanque; var Erro:String): Boolean;
+    function Delete(ID: integer; var Erro:String): Boolean;
+  end;
+
+implementation
+
+{ TBombaControle }
+
+constructor TBombaControle.Create;
+begin
+  uDMTanques.DMTanque := TTanque.Create(nil);
+end;
+
+function TBombaControle.Delete(ID: integer; var Erro: String): Boolean;
+begin
+  Result  := uDMTanques.DMTanque.Delete(ID,Erro);
+end;
+
+destructor TBombaControle.Destroy;
+begin
+  FreeAndNil(uDMTanques.DMTanque);
+  inherited;
+end;
+
+function TBombaControle.Edit(oBomba: TTanque; var Erro: String): Boolean;
+begin
+  Result  := uDMTanques.DMTanque.Edit(otanque,Erro);
+end;
+
+function TBombaControle.Insert(otanque: TTanque; var Erro: String): Boolean;
+begin
+  Result  := uDMTanques.DMTanque.Insert(otanque,Erro);
+end;
+
+procedure TBombaControle.LoadRegistro(otanque: TTanque; NOME: String);
+begin
+  uDMTanques.DMTanque.LoadCad(otanque,NOME);
+end;
+
+procedure TBombaControle.LoadRegistroID(otanque: TTanque; ID: Integer);
+begin
+  uDMTanques.DMTanque.LoadCadID(otanque,ID);
+end;
+
+end.

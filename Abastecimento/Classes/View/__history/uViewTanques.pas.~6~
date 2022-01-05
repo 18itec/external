@@ -1,0 +1,124 @@
+unit uViewTanques;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uCadPai, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Buttons, uDMTanques,
+  uTanqueControle, uTanqueModel;
+
+type
+  TfCadTanques = class(TfCadPai)
+    EdtTanque: TLabeledEdit;
+    CHKStatus: TCheckBox;
+    EdtCombs: TLabeledEdit;
+    EdtLitros: TLabeledEdit;
+    procedure BtnSalvarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure pesquisar;
+    procedure edit;
+    procedure insert;
+    procedure LoadCad;
+    procedure pesquisarID;
+  end;
+
+var
+  fCadTanques: TfCadTanques;
+  ID_ALTR : Integer;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfCadTanques.BtnSalvarClick(Sender: TObject);
+begin
+  inherited;
+  if alter then
+    edit
+  else
+    insert;
+
+  LoadCad;
+end;
+
+procedure TfCadTanques.edit;
+var
+  otanque : TTanque;
+  otanqueCtrl : TTanqueControle;
+  Erro : String;
+begin
+  otanqueCtrl  := TTanqueControle.Create;
+  otanque      := TTanque.Create;
+  try
+    with otanque do
+      begin
+        ID                := ID_ALTR;
+        NOME              := EdtTanque.Text;
+        COMBUSTIVEL       := EdtCombs.Text;
+        DATA_RECEB        := DateToStr(Date);
+        LITROS_RECEBIDOS  := StrToFloat(EdtLitros.Text);
+        if CHKStatus.Checked then STATUS := 1 else STATUS := 0;
+      end;
+
+    if otanqueCtrl.Edit(otanque,Erro) = False then
+      raise Exception.Create(Erro)
+    else
+      MessageDlg('Salvo com sucesso',mtInformation,[mbok],0);
+  finally
+    FreeAndNil(otanque);
+    FreeAndNil(otanqueCtrl);
+  end;
+
+end;
+
+procedure TfCadTanques.insert;
+var
+  otanque : TTanque;
+  otanqueCtrl : TTanqueControle;
+  Erro : String;
+begin
+  otanqueCtrl  := TTanqueControle.Create;
+  otanque      := TTanque.Create;
+  try
+    with otanque do
+      begin
+        ID                := 0;
+        NOME              := EdtTanque.Text;
+        COMBUSTIVEL       := EdtCombs.Text;
+        DATA_RECEB        := DateToStr(Date);
+        LITROS_RECEBIDOS  := StrToFloat(EdtLitros.Text);
+        if CHKStatus.Checked then STATUS := 1 else STATUS := 0;
+      end;
+
+    if otanqueCtrl.Insert(otanque,Erro) = False then
+      raise Exception.Create(Erro)
+    else
+      MessageDlg('Salvo com sucesso',mtInformation,[mbok],0);
+  finally
+    FreeAndNil(otanque);
+    FreeAndNil(otanqueCtrl);
+  end;
+end;
+
+procedure TfCadTanques.LoadCad;
+var
+  DM : TDMTanque;
+begin
+  DM  := TDMTanque.Create(self);
+  DM.Loadall;
+end;
+
+procedure TfCadTanques.pesquisar;
+begin
+
+end;
+
+procedure TfCadTanques.pesquisarID;
+begin
+
+end;
+
+end.

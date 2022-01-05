@@ -1,0 +1,57 @@
+inherited fCadBombas: TfCadBombas
+  Caption = 'Cadastro de Bombas'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PGC: TPageControl
+    inherited TsCad: TTabSheet
+      object Label1: TLabel
+        Left = 255
+        Top = 14
+        Width = 36
+        Height = 13
+        Caption = 'Tanque'
+      end
+      object EdtBomba: TLabeledEdit
+        Left = 3
+        Top = 30
+        Width = 246
+        Height = 19
+        EditLabel.Width = 32
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Bomba'
+        TabOrder = 0
+      end
+      object CBTanque: TComboBox
+        Left = 255
+        Top = 29
+        Width = 179
+        Height = 21
+        TabOrder = 1
+        OnCloseUp = CBTanqueCloseUp
+      end
+      object CHKStatus: TCheckBox
+        Left = 440
+        Top = 31
+        Width = 53
+        Height = 17
+        Caption = 'Ativo'
+        TabOrder = 2
+      end
+    end
+    inherited TsPesq: TTabSheet
+      OnShow = TsPesqShow
+      inherited PnlPesq: TPanel
+        inherited BtnPesq: TButton
+          OnClick = BtnPesqClick
+        end
+      end
+      inherited Grid: TDBGrid
+        OnDblClick = GridDblClick
+      end
+    end
+  end
+  inherited dsPesquisa: TDataSource
+    Left = 288
+    Top = 144
+  end
+end

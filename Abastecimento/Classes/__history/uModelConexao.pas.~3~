@@ -1,0 +1,26 @@
+type
+    ModelQuery = interface;
+
+    ModelConexao = interface
+        function Connection : TObject;
+    end;
+
+    ModelConexaoFactory = interface
+        function Conexao : ModelConexao;
+        function Query : ModelQuery;
+    end;
+
+    ModelQuery = interface
+        function Query : TObject;
+        function Open(aSQL : String) : ModelQuery;
+        function ExecSQL(aSQL : String) : ModelQuery;
+    end;
+
+    ModelEntidade = interface
+        function DataSet ( aValue : TDataSource ) : ModelEntidade;
+        procedure Open;
+    end;
+    ModelEntidadeFactory = interface
+        function Bomba : ModelEntidade;
+    end;
+

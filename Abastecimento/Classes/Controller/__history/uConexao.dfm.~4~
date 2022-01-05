@@ -1,0 +1,22 @@
+object Controle: TControle
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 84
+  Width = 159
+  object FConexao: TFDConnection
+    Params.Strings = (
+      'Database=C:\Fortes\Base\FORTES.FDB'
+      'User_Name=SYSDBA'
+      'Password=masterkey'
+      'Server=localhost'
+      'DriverID=FB')
+    LoginPrompt = False
+    Left = 32
+    Top = 16
+  end
+  object FBDriverLink: TFDPhysFBDriverLink
+    VendorLib = 'C:\Fortes\Sistema\Win32\Debug\fbclient.dll'
+    Left = 96
+    Top = 16
+  end
+end

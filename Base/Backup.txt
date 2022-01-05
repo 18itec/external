@@ -1,0 +1,121 @@
+gbak:readied database C:\Fortes\Base\Fortes.fdb for backup 
+gbak:creating file C:\Fortes\Base\Fortes.fbk 
+gbak:starting transaction 
+gbak:database C:\Fortes\Base\Fortes.fdb has a page size of 16384 bytes. 
+gbak:writing domains 
+gbak:    writing domain RDB$1 
+gbak:    writing domain RDB$2 
+gbak:    writing domain RDB$3 
+gbak:    writing domain RDB$4 
+gbak:    writing domain RDB$32 
+gbak:    writing domain RDB$9 
+gbak:    writing domain RDB$10 
+gbak:    writing domain RDB$13 
+gbak:    writing domain RDB$18 
+gbak:    writing domain RDB$19 
+gbak:    writing domain RDB$20 
+gbak:    writing domain RDB$21 
+gbak:    writing domain RDB$22 
+gbak:    writing domain RDB$28 
+gbak:    writing domain RDB$29 
+gbak:    writing domain RDB$30 
+gbak:    writing domain RDB$31 
+gbak:writing shadow files 
+gbak:writing character sets 
+gbak:writing collations 
+gbak:writing functions 
+gbak:writing tables 
+gbak:    writing table BOMBAS 
+gbak:         writing column ID 
+gbak:         writing column ID_TANQUE 
+gbak:         writing column STATUS 
+gbak:         writing column VLR_LTS 
+gbak:         writing column IMPOSTO 
+gbak:         writing column NOME 
+gbak:    writing table TANQUES 
+gbak:         writing column ID 
+gbak:         writing column LITROS_RECEBIDOS 
+gbak:         writing column DATA_RECEB 
+gbak:         writing column STATUS 
+gbak:         writing column NOME 
+gbak:         writing column COMBUSTIVEL 
+gbak:    writing table ABASTECIMENTOS 
+gbak:         writing column ID 
+gbak:         writing column DATA 
+gbak:         writing column HORA 
+gbak:         writing column ID_BOMBA 
+gbak:         writing column QTD_LITROS 
+gbak:writing types 
+gbak:writing filters 
+gbak:writing id generators 
+gbak:    writing generator GEN_BOMBAS_ID value 0 
+gbak:    writing generator GEN_TIPO_COMB_ID value 1 
+gbak:    writing generator GEN_TANQUES_ID value 1 
+gbak:    writing generator GEN_IMPOSTOS_ID value 1 
+gbak:    writing generator GEN_ABASTECIMENTOS_ID value 0 
+gbak:    writing generator GEN_REC_COMBUSTIVEL_ID value 0 
+gbak:writing stored procedures 
+gbak:writing exceptions 
+gbak:    writing index PK_ABASTECIMENTOS 
+gbak:    writing index FK_ABASTECIMENTOS_1 
+gbak:    writing data for table ABASTECIMENTOS 
+gbak:9 records written 
+gbak:    writing index PK_TANQUES 
+gbak:    writing data for table TANQUES 
+gbak:2 records written 
+gbak:    writing index PK_BOMBAS 
+gbak:    writing index FK_BOMBAS_1 
+gbak:    writing data for table BOMBAS 
+gbak:4 records written 
+gbak:writing triggers 
+gbak:    writing trigger TANQUES_BI 
+gbak:    writing trigger ABASTECIMENTOS_BI 
+gbak:writing trigger messages 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user PUBLIC 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user PUBLIC 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user PUBLIC 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:    writing privilege for user SYSDBA 
+gbak:writing table constraints 
+gbak:writing constraint INTEG_1 
+gbak:writing constraint PK_BOMBAS 
+gbak:writing constraint INTEG_3 
+gbak:writing constraint PK_TANQUES 
+gbak:writing constraint INTEG_5 
+gbak:writing constraint PK_ABASTECIMENTOS 
+gbak:writing constraint FK_ABASTECIMENTOS_1 
+gbak:writing constraint FK_BOMBAS_1 
+gbak:writing referential constraints 
+gbak:writing check constraints 
+gbak:writing SQL roles 
+gbak:writing names mapping 
+gbak:closing file, committing, and finishing. 6144 bytes written 
+

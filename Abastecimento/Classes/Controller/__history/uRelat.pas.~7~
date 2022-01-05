@@ -1,0 +1,50 @@
+unit uRelat;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TDMRelat = class(TDataModule)
+    QrRelat: TFDQuery;
+    QrFKTanque: TFDQuery;
+    QrFKBombas: TFDQuery;
+  private
+  public
+    procedure GetFkBombas;
+    procedure GetFkTanque;
+    procedure LoadRelat(ID_BOMBA,ID_TANQUE,DT_INI,DT_FIM : String; periodo,bomba,tanque,todos : Boolean);
+  end;
+
+var
+  DMRelat: TDMRelat;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TDMRelat }
+
+procedure TDMRelat.GetFkBombas;
+begin
+  QrFKBombas.Open;
+end;
+
+procedure TDMRelat.GetFkTanque;
+begin
+  QrFKTanque.Open;
+end;
+
+procedure TDMRelat.LoadRelat(ID_BOMBA, ID_TANQUE, DT_INI, DT_FIM: String;
+  periodo, bomba, tanque, todos: Boolean);
+begin
+// teste
+end;
+
+end.

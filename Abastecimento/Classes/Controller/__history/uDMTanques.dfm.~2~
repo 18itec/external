@@ -1,0 +1,106 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 211
+  Width = 125
+  object QrSearch: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'select id, nome, id_tanque, status'
+      'from bombas')
+    Left = 16
+    Top = 16
+  end
+  object QrInsert: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'insert into bombas (id, nome, id_tanque, status, imposto)'
+      'values (:id, :nome, :id_tanque, :status, :imposto)')
+    Left = 72
+    Top = 16
+    ParamData = <
+      item
+        Name = 'ID'
+        DataType = ftInteger
+        ParamType = ptInput
+      end
+      item
+        Name = 'NOME'
+        DataType = ftString
+        ParamType = ptInput
+      end
+      item
+        Name = 'ID_TANQUE'
+        DataType = ftInteger
+        ParamType = ptInput
+      end
+      item
+        Name = 'STATUS'
+        DataType = ftInteger
+        ParamType = ptInput
+      end
+      item
+        Name = 'IMPOSTO'
+        ParamType = ptInput
+      end>
+  end
+  object QrDelete: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'delete from bombas'
+      'where (id = :id)')
+    Left = 72
+    Top = 80
+    ParamData = <
+      item
+        Name = 'ID'
+        DataType = ftInteger
+        ParamType = ptInput
+      end>
+  end
+  object QrEdit: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'update bombas'
+      'set nome = :nome,'
+      '    id_tanque = :id_tanque,'
+      '    status = :status,'
+      '    imposto = :imposto'
+      'where (id = :id)')
+    Left = 16
+    Top = 80
+    ParamData = <
+      item
+        Name = 'NOME'
+        DataType = ftString
+        ParamType = ptInput
+      end
+      item
+        Name = 'ID_TANQUE'
+        DataType = ftInteger
+        ParamType = ptInput
+      end
+      item
+        Name = 'STATUS'
+        DataType = ftInteger
+        ParamType = ptInput
+      end
+      item
+        Name = 'IMPOSTO'
+        DataType = ftFloat
+        ParamType = ptInput
+      end
+      item
+        Name = 'ID'
+        DataType = ftInteger
+        ParamType = ptInput
+      end>
+  end
+  object QrFK: TFDQuery
+    Connection = Controle.FConexao
+    SQL.Strings = (
+      'select id, nome'
+      'from tanques where status = 1')
+    Left = 16
+    Top = 144
+  end
+end
